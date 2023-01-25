@@ -1,12 +1,12 @@
 @inline
 function write_u32(ptr: u32, v: u32): u32 {
-  store<u32>(ptr, v, 0, 4)
+  store<u32>(ptr, v);
   return 4;
 }
 
 @inline
 function write_u8(ptr: u32, v: u8): u32 {
-  store<u8>(ptr, v)
+  store<u8>(ptr, v);
   return 1;
 }
 
@@ -60,21 +60,14 @@ export function write_signed_leb128_u32(ptr: u32, value: u32): u32 {
 
 @inline
 export function leb128_u32_byte_size(v: u32): u32 {
-  let wrote: u32 = 0;
-  while (v >= 0x80) {
-    wrote += 1
-    v >>= 7;
-  }
-  wrote += 1
-  return wrote;
+  return 8 - (clz(v) + 31) / 8;
 }
 
 // Write a Vec of a given size to `ptr`. Arguments are used instead of an array
 // because the array requires runtime support for allocations.
 @inline
 export function write_vec5<T>(ptr: u32, arg1: T, arg2: T, arg3: T, arg4: T, arg5: T): u32 {
-  let wrote: u32 = 0;
-  wrote += write_leb128_u32(ptr, 5);
+  let wrote: u32 = write_leb128_u32(ptr, 5);
 
   switch (sizeof<T>()) {
     case 1: {
@@ -86,7 +79,7 @@ export function write_vec5<T>(ptr: u32, arg1: T, arg2: T, arg3: T, arg4: T, arg5
       break;
     }
   }
-  return wrote
+  return wrote;
 }
 
 @inline
