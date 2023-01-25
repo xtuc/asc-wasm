@@ -23,6 +23,8 @@ ptr += wasm.write_version(ptr);
 
 ## APIs
 
+All function return how many bytes they wrote.
+
 - `write_section_header(ptr: u32, id: u8, size: u32): u32`
 
 Write a section header at `ptr`.
@@ -50,5 +52,13 @@ Write WebAssembly magic number at `ptr`.
 - `write_version(ptr: u32): u32`
 
 Write WebAssembly version at `ptr`.
+
+- `write_i32_const(ptr: u32, value: u32): u32`
+
+Write a i32.const instruction with `value` as immediate at `ptr`.
+
+- `write_end(ptr: u32): u32`
+
+Write the end instruction at `ptr`.
 
 [LEB128]: https://en.wikipedia.org/wiki/LEB128
