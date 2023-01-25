@@ -72,20 +72,35 @@ export function leb128_u32_byte_size(v: u32): u32 {
 // Write a Vec of a given size to `ptr`. Arguments are used instead of an array
 // because the array requires runtime support for allocations.
 @inline
-export function write_vec5<T>(ptr: u32, arg1: T, arg2: T, arg3: T, arg4: T, arg5: T): u32 {
+export function write_vec9(
+    ptr: u32, arg1: u8, arg2: u8, arg3: u8, arg4: u8,
+    arg5: u8, arg6: u8, arg7: u8, arg8: u8, arg9: u8): u32 {
   let wrote: u32 = 0;
-  wrote += write_leb128_u32(ptr, 5);
+  wrote += write_leb128_u32(ptr, 9);
 
-  switch (sizeof<T>()) {
-    case 1: {
-      wrote += write_u8(ptr + wrote, arg1);
-      wrote += write_u8(ptr + wrote, arg2);
-      wrote += write_u8(ptr + wrote, arg3);
-      wrote += write_u8(ptr + wrote, arg4);
-      wrote += write_u8(ptr + wrote, arg5);
-      break;
-    }
-  }
+  wrote += write_u8(ptr + wrote, arg1);
+  wrote += write_u8(ptr + wrote, arg2);
+  wrote += write_u8(ptr + wrote, arg3);
+  wrote += write_u8(ptr + wrote, arg4);
+  wrote += write_u8(ptr + wrote, arg5);
+  wrote += write_u8(ptr + wrote, arg6);
+  wrote += write_u8(ptr + wrote, arg7);
+  wrote += write_u8(ptr + wrote, arg8);
+  wrote += write_u8(ptr + wrote, arg9);
+  return wrote
+}
+
+// Write a Vec of a given size to `ptr`. Arguments are used instead of an array
+// because the array requires runtime support for allocations.
+@inline
+export function write_vec4(ptr: u32, arg1: u8, arg2: u8, arg3: u8, arg4: u8): u32 {
+  let wrote: u32 = 0;
+  wrote += write_leb128_u32(ptr, 4);
+
+  wrote += write_u8(ptr + wrote, arg1);
+  wrote += write_u8(ptr + wrote, arg2);
+  wrote += write_u8(ptr + wrote, arg3);
+  wrote += write_u8(ptr + wrote, arg4);
   return wrote
 }
 
@@ -97,4 +112,17 @@ export function write_magic(ptr: u32): u32 {
 @inline
 export function write_version(ptr: u32): u32 {
   return write_u32(ptr, 0x1);
+}
+
+@inline
+export function write_i32_const(ptr: u32, value: u32): u32 {
+  let wrote: u32 = 0;
+  wrote += write_u8(ptr, 0x41);
+  wrote += write_signed_leb128_u32(ptr + wrote, value)
+  return wrote;
+}
+
+@inline
+export function write_end(ptr: u32): u32 {
+  return write_u8(ptr, 0x0b);
 }
