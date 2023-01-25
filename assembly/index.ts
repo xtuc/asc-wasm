@@ -60,7 +60,8 @@ export function write_signed_leb128_u32(ptr: u32, value: u32): u32 {
 
 @inline
 export function leb128_u32_byte_size(v: u32): u32 {
-  return 8 - (clz(v) + 31) / 8;
+  let b = 8 - (clz(v | 1) + 31) / 7;
+  return b > 7 ? 8 : b + 1;
 }
 
 // Write a Vec of a given size to `ptr`. Arguments are used instead of an array
