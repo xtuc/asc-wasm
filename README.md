@@ -41,9 +41,9 @@ Write `value` as signed [LEB128] at `ptr` but `value` is unsigned.
 
 Calculate the encoded size of `value` as unsigned [LEB128].
 
-- `write_vec5<T>(ptr: u32, arg1: T, arg2: T, arg3: T, arg4: T, arg5: T): u32`
+- `write_vecN<T>(ptr: u32, arg0: u32...argN: u32): u32`
 
-Write a Vec of constant length at `ptr`.
+Write a Vec of constant length (N) at `ptr`.
 
 - `write_magic(ptr: u32): u32`
 
