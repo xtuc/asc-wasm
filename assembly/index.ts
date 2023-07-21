@@ -135,3 +135,14 @@ export function write_memory_with_max(ptr: u32, min: u32, max: u32): u32 {
   wrote += write_leb128_u32(ptr + wrote, max);
   return wrote;
 }
+
+@inline
+export function write_const_i32_global(ptr: u32, value: i32): u32 {
+  let wrote: u32 = 0;
+  wrote += write_u8(ptr + wrote, 0x7f); // i32
+  wrote += write_u8(ptr + wrote, 0x0); // const
+  wrote += write_i32_const(ptr + wrote, value);
+  wrote += write_end(ptr + wrote);
+  return wrote;
+}
+
